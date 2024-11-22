@@ -20,7 +20,7 @@ export const goods = [
 const goodsMap = goods.map(good => {
   return {
     name: good,
-    id: uuid(good),
+    id: uuid(),
   };
 });
 
@@ -56,52 +56,42 @@ export const App = () => {
       <table className="table">
         <tbody>
           {goodsMap.map(good => (
-            <Good
+            <tr
               key={good.id}
-              name={good.name}
-              isSelected={good.name === selectedGood}
-              selectedGood={selectedGood}
-              handleClick={() => handleClick(good)}
-              removeSelection={() => removeSelection()}
-            />
+              data-cy="Good"
+              className={cn({
+                'has-background-success-light': good.name === selectedGood,
+              })}
+            >
+              <td>
+                {good.name === selectedGood ? (
+                  <button
+                    data-cy="RemoveButton"
+                    type="button"
+                    className="button is-info"
+                    onClick={() => removeSelection()}
+                  >
+                    -
+                  </button>
+                ) : (
+                  <button
+                    data-cy="AddButton"
+                    type="button"
+                    className="button"
+                    onClick={() => handleClick(good)}
+                  >
+                    +
+                  </button>
+                )}
+              </td>
+
+              <td data-cy="GoodTitle" className="is-vcentered">
+                {good.name}
+              </td>
+            </tr>
           ))}
         </tbody>
       </table>
     </main>
-  );
-};
-
-export const Good = ({ name, isSelected, handleClick, removeSelection }) => {
-  return (
-    <tr
-      data-cy="Good"
-      className={cn({ 'has-background-success-light': isSelected })}
-    >
-      <td>
-        {isSelected ? (
-          <button
-            data-cy="RemoveButton"
-            type="button"
-            className="button is-info"
-            onClick={removeSelection}
-          >
-            -
-          </button>
-        ) : (
-          <button
-            data-cy="AddButton"
-            type="button"
-            className="button"
-            onClick={handleClick}
-          >
-            +
-          </button>
-        )}
-      </td>
-
-      <td data-cy="GoodTitle" className="is-vcentered">
-        {name}
-      </td>
-    </tr>
   );
 };
